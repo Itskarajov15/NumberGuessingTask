@@ -1,0 +1,26 @@
+services:
+  numberguessingtask:
+    image: ${DOCKER_REGISTRY-}numberguessingtask
+    container_name: NumberGuessingTask.Api
+    ports:
+      - 8080:8080
+      - 8081:8081
+    build:
+      context: .
+      dockerfile: NumberGuessingTask/Dockerfile
+    depends_on:
+      - numberGuessingTaskDB
+  
+  numberGuessingTaskDB:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: NumberGuessingTask.DB
+    ports:
+        - 8002:1433
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=!Password123
+    volumes:
+        - "./sqldata:/var/opt/mssql/data/"
+
+volumes:
+  sqldata:
